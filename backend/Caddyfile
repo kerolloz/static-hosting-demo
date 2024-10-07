@@ -1,8 +1,24 @@
-http://localhost {
-  header /* {
+(common) {
+  header {
     -Server
   }
 
   encode zstd gzip
-  reverse_proxy localhost:3000 # or whatever port defined in your .env file
+}
+
+http://lvh.me {
+  import common
+  reverse_proxy localhost:3000
+}
+
+http://www.lvh.me {
+  import common
+  reverse_proxy localhost:5173
+}
+
+# Match any subdomain xxx.lvh.me to the folder /var/www/static-hosting/xxx
+http://*.lvh.me {
+  import common
+  root * /var/www/static-hosting/{labels.2}
+  file_server
 }

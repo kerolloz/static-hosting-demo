@@ -8,9 +8,9 @@ import {
 } from 'fastify-type-provider-zod';
 import { ZodError } from 'zod';
 import { env } from './lib/env';
+import { multer } from './lib/multer';
 import { SWAGGER_ROUTE, registerSwagger } from './lib/swagger';
 import { registerAllRoutes } from './routes';
-import { multer } from './lib/multer';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -30,7 +30,7 @@ app.setErrorHandler((error, _, reply) =>
 
 app.after(() => registerAllRoutes(app));
 
-app.listen({ host:'127.0.0.1', port: env('PORT') }, (err, address) => {
+app.listen({ host: '0.0.0.0', port: env('PORT') }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
