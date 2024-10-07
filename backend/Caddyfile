@@ -1,0 +1,8 @@
+http://localhost {
+  header /* {
+    -Server
+  }
+
+  encode zstd gzip
+  reverse_proxy localhost:3000 # or whatever port defined in your .env file
+}

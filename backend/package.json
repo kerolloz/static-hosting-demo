@@ -1,0 +1,40 @@
+{
+  "name": "sample-crud",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "bun .",
+    "dev": "bun --watch .",
+    "worker": "bun src/queue/worker.ts",
+    "worker:dev": "bun --watch src/queue/worker.ts",
+    "build": "tsc",
+    "lint": "biome ci ."
+  },
+  "keywords": [],
+  "author": "Kerollos Magdy <contact@kerolloz.dev>",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@fastify/cors": "9",
+    "@fastify/helmet": "11",
+    "@fastify/swagger": "8",
+    "@fastify/swagger-ui": "4",
+    "bullmq": "^5.13.2",
+    "fastify": "4",
+    "fastify-multer": "^2.0.3",
+    "fastify-plugin": "4",
+    "fastify-socket.io": "^5.1.0",
+    "fastify-type-provider-zod": "1",
+    "ioredis": "^5.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.2",
+    "@types/bun": "latest",
+    "typescript": "^5.6.2"
+  },
+  "trustedDependencies": [
+    "@biomejs/biome"
+  ]
+}

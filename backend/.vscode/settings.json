@@ -1,0 +1,18 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.organizeImports.biome": "always",
+    "quickfix.biome": "explicit",
+    "source.addMissingImports.ts": "always",
+    "source.removeUnusedImports": "always",
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "biome.lspBin": "./node_modules/@biomejs/biome/bin/biome"
+}
