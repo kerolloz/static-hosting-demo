@@ -48,4 +48,25 @@ export default (app: FastifyZodInstance) =>
 
         return response.status(202).send({ message: 'Accepted' });
       },
+    })
+    .route({
+      method: 'POST',
+      url: '/deployments/git',
+      schema: {
+        body: z.object({
+          repoUrl: z.string().url(),
+          branch: z.string(),
+          buildCommand: z.string(),
+          outputDir: z.string(),
+        }),
+      },
+      handler: async (request, response) => {
+        console.log('Request body:', request.body);
+        triggerBuildJob({
+          staticBuildType: 'GIT',
+          ...request.body,
+        });
+
+        return response.status(202).send({ message: 'Accepted' });
+      },
     });

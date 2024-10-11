@@ -6,10 +6,12 @@ type ZipBuildJob = {
   zipFilePath: string;
 };
 
-type GithubBuildJob = {
-  staticBuildType: 'GITHUB';
-  githubRepoUrl: string;
+type GitBuildJob = {
+  staticBuildType: 'GIT';
+  repoUrl: string;
   buildCommand: string;
+  branch: string;
+  outputDir: string;
 };
 
-export type BuildJob = ZipBuildJob | GithubBuildJob;
+export type BuildJob = ZipBuildJob | GitBuildJob;

@@ -20,5 +20,6 @@ http://www.lvh.me {
 http://*.lvh.me {
   import common
   root * /var/www/static-hosting/{labels.2}
+  try_files {path} {file} /index.html
   file_server
 }

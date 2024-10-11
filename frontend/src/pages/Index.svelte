@@ -13,10 +13,16 @@
   <h1 class="text-4xl mb-8">Deployments</h1>
   <!-- New deployment button -->
   <Link
-    to="/new"
+    to="/new/zip"
     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-8"
   >
-    New Deployment
+    New ZIP Deployment
+  </Link>
+  <Link
+    to="/new/git"
+    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-8"
+  >
+    New Git Deployment
   </Link>
   <ol class="w-3/4">
     {#await deployments}

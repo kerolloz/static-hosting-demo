@@ -11,12 +11,30 @@ const buildJobsWorker = new Worker<BuildJob>(
   BUILD_JOBS_QUEUE_NAME,
   async (job) => {
     console.log('Processing job', job.id, job.data);
+    const jobUuid = createUUid();
+
     if (job.data.staticBuildType === 'ZIP') {
-      const jobUuid = createUUid();
-      // 1. Extract the zip file into the shared static-hosting directory
-      // 2. Update Caddy to do static file server for the new directory
+      // Handle ZIP build type
       const { zipFilePath } = job.data;
       execSync(`unzip -o ${zipFilePath} -d ${STATIC_HOSTING_DIR}/${jobUuid}`);
+      const domain = `http://${jobUuid}.lvh.me`;
+
+      console.log('Domain:', domain);
+    } else if (job.data.staticBuildType === 'GIT') {
+      // Handle GIT build type
+      const { repoUrl, branch, buildCommand, outputDir } = job.data;
+      const tmpDir = `/tmp/${jobUuid}`;
+
+      // Clone the repository and checkout the specified branch
+      execSync(`git clone ${repoUrl} ${tmpDir} --depth 1`);
+      execSync(`git -C ${tmpDir} checkout ${branch}`);
+
+      // Run the build command
+      execSync(`cd ${tmpDir} && ${buildCommand}`);
+
+      // Move the output directory to the static hosting directory
+      execSync(`mv ${tmpDir}/${outputDir} ${STATIC_HOSTING_DIR}/${jobUuid}`);
+
       const domain = `http://${jobUuid}.lvh.me`;
 
       console.log('Domain:', domain);
