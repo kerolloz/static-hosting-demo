@@ -1,5 +1,21 @@
 services:
 
+  api:
+    build: ./backend
+    env_file:
+      - .env
+    restart: unless-stopped
+    command: bun start
+    ports:
+      - "3000:3000"
+
+  worker:
+    build: ./backend
+    env_file:
+      - .env
+    restart: unless-stopped
+    command: bun worker
+
   redis:
     image: redis:alpine
     container_name: redis
@@ -16,7 +32,8 @@ services:
       - "443:443"
       - "443:443/udp"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./prod.Caddyfile:/etc/caddy/Caddyfile
+      - ./frontend/dist:/srv/frontend
       - caddy_data:/data
       - caddy_config:/config
 
@@ -24,3 +41,5 @@ volumes:
   redis-data:
   caddy_data:
   caddy_config:
+
+

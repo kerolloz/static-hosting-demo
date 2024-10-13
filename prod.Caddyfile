@@ -1,0 +1,28 @@
+(common) {
+  header {
+    -Server
+  }
+
+  encode zstd gzip
+}
+
+http://lvh.me {
+  import common
+  reverse_proxy localhost:3000
+}
+
+http://www.lvh.me {
+  import common
+  root * /srv/frontend
+  try_files {path} {file} /index.html
+  file_server
+}
+
+# Match any subdomain xxx.lvh.me to the folder /var/www/static-hosting/xxx
+http://*.lvh.me {
+  import common
+  root * /var/www/static-hosting/{labels.2}
+  try_files {path} {file} /index.html
+  file_server
+}
+
