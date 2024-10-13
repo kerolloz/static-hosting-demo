@@ -6,19 +6,19 @@
   encode zstd gzip
 }
 
-api.z.kerolloz.dev {
+api.astro.kerolloz.dev {
   import common
   reverse_proxy api:3000
 }
 
-www.z.kerolloz.dev, z.kerolloz.dev {
+www.astro.kerolloz.dev, astro.kerolloz.dev {
   import common
   root * /srv/frontend
   try_files {path} {file} /index.html
   file_server
 }
 
-http://*.z.kerolloz.dev {
+http://*.page.kerolloz.dev {
   import common
   root * /srv/static-hosting/{labels.2}
   try_files {path} {file} /index.html
