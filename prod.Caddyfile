@@ -6,19 +6,19 @@
   encode zstd gzip
 }
 
-api.kloud.kerolloz.dev {
+api.z.kerolloz.dev {
   import common
   reverse_proxy api:3000
 }
 
-www.kloud.kerolloz.dev, kloud.kerolloz.dev {
+www.z.kerolloz.dev, z.kerolloz.dev {
   import common
   root * /srv/frontend
   try_files {path} {file} /index.html
   file_server
 }
 
-http://*.kloud.kerolloz.dev {
+http://*.z.kerolloz.dev {
   import common
   root * /srv/static-hosting/{labels.2}
   try_files {path} {file} /index.html
