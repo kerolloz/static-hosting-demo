@@ -1,5 +1,5 @@
 {
-  "name": "sample-crud",
+  "name": "static-hosting-api",
   "version": "1.0.0",
   "main": "src/index.ts",
   "scripts": {
@@ -22,7 +22,6 @@
     "bullmq": "^5.13.2",
     "fastify": "4",
     "fastify-multer": "^2.0.3",
-    "fastify-plugin": "4",
     "fastify-type-provider-zod": "1",
     "ioredis": "^5.4.1",
     "pino-pretty": "^11.2.2",

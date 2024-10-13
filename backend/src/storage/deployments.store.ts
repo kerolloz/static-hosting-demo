@@ -9,7 +9,6 @@ import {
 
 /**
  * This is a simple in-memory Redis store that stores deployments.
- * Deployments are stored in the format of key => `deployment:{deploymentId}` and value => `deploymentStatus`
  */
 export namespace DeploymentsStore {
   export async function getDeployments(): Promise<Deployment[]> {
