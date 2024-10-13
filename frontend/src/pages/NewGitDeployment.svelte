@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { BACKEND_BASE_URI } from "../lib/api";
   const createGitDeployment = (e: SubmitEvent) => {
     // Send a JSON request to the backend
     const target = e.target as HTMLFormElement;
@@ -18,7 +19,7 @@
       return;
     }
 
-    fetch("http://localhost:3000/deployments/git", {
+    fetch(`${BACKEND_BASE_URI}/deployments/git`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -6,8 +6,8 @@
     DeploymentStatusEnum,
     DeploymentTypeEnum,
   } from "../../../backend/src/shared/types";
+  import { BACKEND_BASE_URI } from "../lib/api";
 
-  const BACKEND_BASE_URI = "http://localhost:3000";
   let deployments: Deployment[] = [];
   let error: Error | null = null;
   let loading = true;

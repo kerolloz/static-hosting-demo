@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { BACKEND_BASE_URI } from "../lib/api";
+
   const createZipFileDeployment = (e: SubmitEvent) => {
     // Send a multipart/form-data request to the backend
     const formData = new FormData();
@@ -10,7 +12,7 @@
       alert("No file selected");
       return;
     }
-    fetch("http://localhost:3000/deployments/zip", {
+    fetch(`${BACKEND_BASE_URI}/deployments/zip`, {
       method: "POST",
       body: formData,
     })
