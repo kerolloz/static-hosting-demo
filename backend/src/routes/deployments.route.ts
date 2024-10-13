@@ -3,8 +3,9 @@ import { throwWhenNullish } from '../errors/nullish';
 import type { FastifyZodInstance } from '../index';
 import { multer } from '../lib/multer';
 import { triggerBuildJob } from '../queue/queue';
-import { DeploymentTypeEnum, deploymentZod } from '../shared/types';
+import { DeploymentTypeEnum } from '../shared/types';
 import { DeploymentsStore } from '../storage/deployments.store';
+import { deploymentZod } from '../shared/validations';
 
 export default (app: FastifyZodInstance) =>
   app

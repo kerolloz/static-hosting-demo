@@ -4,8 +4,8 @@ import {
   type Deployment,
   DeploymentStatusEnum,
   type DeploymentTypeEnum,
-  deploymentZod,
 } from '../shared/types';
+import { deploymentZod } from '../shared/validations';
 
 /**
  * This is a simple in-memory Redis store that stores deployments.
