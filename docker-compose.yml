@@ -8,6 +8,8 @@ services:
     command: bun start
     ports:
       - "3000:3000"
+    volumes:
+      - zip_uploads:/tmp
 
   worker:
     build: ./backend
@@ -15,6 +17,9 @@ services:
       - ./backend/.env
     restart: unless-stopped
     command: bun worker
+    volumes:
+      - zip_uploads:/tmp
+      - static_hosting:/var/www/static-hosting
 
   redis:
     image: redis:alpine
@@ -22,7 +27,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - redis-data:/data
+      - redis_data:/data
 
   caddy:
     image: caddy:2-alpine
@@ -36,10 +41,13 @@ services:
       - ./frontend/dist:/srv/frontend
       - caddy_data:/data
       - caddy_config:/config
+      - static_hosting:/var/www/static-hosting
 
 volumes:
-  redis-data:
+  redis_data:
   caddy_data:
   caddy_config:
+  zip_uploads:
+  static_hosting:
 
 
