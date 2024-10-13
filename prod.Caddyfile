@@ -6,23 +6,21 @@
   encode zstd gzip
 }
 
-http://lvh.me {
+api.kloud.kerolloz.dev {
   import common
-  reverse_proxy localhost:3000
+  reverse_proxy api:3000
 }
 
-http://www.lvh.me {
+www.kloud.kerolloz.dev, kloud.kerolloz.dev {
   import common
   root * /srv/frontend
   try_files {path} {file} /index.html
   file_server
 }
 
-# Match any subdomain xxx.lvh.me to the folder /var/www/static-hosting/xxx
-http://*.lvh.me {
+http://*.kloud.kerolloz.dev {
   import common
-  root * /var/www/static-hosting/{labels.2}
+  root * /srv/static-hosting/{labels.2}
   try_files {path} {file} /index.html
   file_server
 }
-

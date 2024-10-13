@@ -19,7 +19,7 @@ services:
     command: bun worker
     volumes:
       - zip_uploads:/tmp
-      - static_hosting:/var/www/static-hosting
+      - static_hosting:/srv/static-hosting
 
   redis:
     image: redis:alpine
@@ -41,7 +41,7 @@ services:
       - ./frontend/dist:/srv/frontend
       - caddy_data:/data
       - caddy_config:/config
-      - static_hosting:/var/www/static-hosting
+      - static_hosting:/srv/static-hosting
 
 volumes:
   redis_data:
