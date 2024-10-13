@@ -1,9 +1,10 @@
-import fs from 'node:fs/promises';
 import { z } from 'zod';
-import type { FastifyZodInstance } from '../lib';
-import { STATIC_HOSTING_DIR, getStaticHostingUrl } from '../lib/hosting';
+import { throwWhenNullish } from '../errors/nullish';
+import type { FastifyZodInstance } from '../index';
 import { multer } from '../lib/multer';
 import { triggerBuildJob } from '../queue/queue';
+import { DeploymentTypeEnum, deploymentZod } from '../shared/types';
+import { DeploymentsStore } from '../storage/deployments.store';
 
 export default (app: FastifyZodInstance) =>
   app
@@ -12,26 +13,17 @@ export default (app: FastifyZodInstance) =>
       url: '/deployments',
       schema: {
         response: {
-          200: z.array(z.object({ url: z.string() })),
+          200: z.array(deploymentZod),
         },
       },
       handler: async (_, response) => {
-        const deployments = await fs
-          .readdir(STATIC_HOSTING_DIR)
-          .then((files) => files.sort())
-          .catch(() => []);
-
-        return response.send(
-          deployments.map((subdomain) => ({
-            url: getStaticHostingUrl(subdomain),
-          })),
-        );
+        return await DeploymentsStore.getDeployments();
       },
     })
     .route({
       method: 'POST',
       url: '/deployments/zip',
-      preValidation: multer.single('file'),
+      preHandler: multer.single('file'),
       handler: async (request, response) => {
         const { file } = request;
 
@@ -41,9 +33,15 @@ export default (app: FastifyZodInstance) =>
             .send({ message: 'Bad Request', error: 'Invalid file type' });
         }
 
+        const deploymentId = await DeploymentsStore.createNewDeployment(
+          DeploymentTypeEnum.ZIP,
+        );
+
         triggerBuildJob({
+          deploymentId,
           staticBuildType: 'ZIP',
-          zipFilePath: file.path ?? '',
+          zipFilePath:
+            file.path ?? throwWhenNullish(new Error('File path is nullish')),
         });
 
         return response.status(202).send({ message: 'Accepted' });
@@ -61,8 +59,12 @@ export default (app: FastifyZodInstance) =>
         }),
       },
       handler: async (request, response) => {
-        console.log('Request body:', request.body);
+        const deploymentId = await DeploymentsStore.createNewDeployment(
+          DeploymentTypeEnum.GIT,
+        );
+
         triggerBuildJob({
+          deploymentId,
           staticBuildType: 'GIT',
           ...request.body,
         });

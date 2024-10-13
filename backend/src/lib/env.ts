@@ -5,6 +5,7 @@ import z from 'zod';
 const envList = z.object({
   PORT: z.coerce.number().default(3000),
   REDIS_URL: z.string().url().describe('the url to connect to Redis'),
+  NODE_ENV: z.string().default('development'),
 });
 
 const safeEnv = envList.parse(process.env);

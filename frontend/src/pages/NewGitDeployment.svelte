@@ -28,7 +28,6 @@
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        alert("Deployment created successfully");
         window.location.href = "/";
       })
       .catch((error) => {

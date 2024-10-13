@@ -1,5 +1,5 @@
 import fs from 'node:fs/promises';
-import type { FastifyZodInstance } from '../lib';
+import type { FastifyZodInstance } from '../index';
 
 export const registerAllRoutes = async (app: FastifyZodInstance) => {
   const files = await fs.readdir(__dirname);
@@ -11,7 +11,7 @@ export const registerAllRoutes = async (app: FastifyZodInstance) => {
       .map(async (file) => {
         const routeFile = await import(`./${file}`);
         routeFile.default(app);
-        console.log(`Route ${file} registered`);
+        app.log.info(`Route ${file} registered`);
       }),
   );
 };

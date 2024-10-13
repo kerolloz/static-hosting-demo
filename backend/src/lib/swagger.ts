@@ -1,7 +1,7 @@
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUI from '@fastify/swagger-ui';
 import { jsonSchemaTransform } from 'fastify-type-provider-zod';
-import type { FastifyZodInstance } from './types';
+import type { FastifyZodInstance } from '../index';
 
 export const SWAGGER_ROUTE = '/swagger' as const;
 

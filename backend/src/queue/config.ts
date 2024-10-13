@@ -14,4 +14,4 @@ type GitBuildJob = {
   outputDir: string;
 };
 
-export type BuildJob = ZipBuildJob | GitBuildJob;
+export type BuildJob = (ZipBuildJob | GitBuildJob) & { deploymentId: string };

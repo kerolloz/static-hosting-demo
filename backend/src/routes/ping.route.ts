@@ -1,5 +1,5 @@
 import z from 'zod';
-import type { FastifyZodInstance } from '../lib';
+import type { FastifyZodInstance } from '../index';
 
 export default (app: FastifyZodInstance) =>
   app.route({
@@ -12,7 +12,5 @@ export default (app: FastifyZodInstance) =>
         }),
       },
     },
-    handler: async () => {
-      return { message: 'pong' };
-    },
+    handler: async () => ({ message: 'pong' }),
   });
