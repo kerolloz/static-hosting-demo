@@ -3,7 +3,7 @@ services:
   api:
     build: ./backend
     env_file:
-      - .env
+      - ./backend/.env
     restart: unless-stopped
     command: bun start
     ports:
@@ -12,7 +12,7 @@ services:
   worker:
     build: ./backend
     env_file:
-      - .env
+      - ./backend/.env
     restart: unless-stopped
     command: bun worker
 
