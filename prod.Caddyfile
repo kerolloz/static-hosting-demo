@@ -18,7 +18,7 @@ www.kloud.kerolloz.dev, kloud.kerolloz.dev {
   file_server
 }
 
-http://*.kloud.kerolloz.dev {
+*.kloud.kerolloz.dev {
   import common
   root * /srv/static-hosting/{labels.2}
   try_files {path} {file} /index.html
