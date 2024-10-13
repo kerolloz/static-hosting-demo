@@ -1,2 +1,2 @@
 export const BACKEND_BASE_URI =
-  import.meta.env.BACKEND_BASE_URL ?? 'http://localhost:3000';
+  import.meta.env.VITE_BACKEND_BASE_URI ?? 'http://localhost:3000';
