@@ -1,13 +1,46 @@
 <script lang="ts">
+  import debounce from "lodash.debounce";
+  import { onMount } from "svelte";
   import { BACKEND_BASE_URI } from "../lib/api";
+
+  // biome-ignore lint/style/useConst: <explanation>
+  let subdomain = "";
+  let subdomainAvailable = true;
+  let checkingSubdomain = false;
+  let errorMessage = "";
+
+  const checkSubdomainAvailability = debounce(async () => {
+    if (!subdomain) return;
+    checkingSubdomain = true;
+    try {
+      const response = await fetch(
+        `${BACKEND_BASE_URI}/deployments/check-subdomain/${subdomain}`,
+      );
+      const data = await response.json();
+      subdomainAvailable = data.available;
+      errorMessage = subdomainAvailable ? "" : "Subdomain is already taken.";
+    } catch (error) {
+      errorMessage = "Error checking subdomain availability.";
+    } finally {
+      checkingSubdomain = false;
+    }
+  }, 300);
+
   const createGitDeployment = (e: SubmitEvent) => {
+    if (!subdomainAvailable) {
+      alert("Subdomain is already taken. Please choose another one.");
+      return;
+    }
+
     // Send a JSON request to the backend
     const target = e.target as HTMLFormElement;
-    const repoUrlInput = target[0] as HTMLInputElement;
-    const branchInput = target[1] as HTMLInputElement;
-    const buildCommandInput = target[2] as HTMLInputElement;
-    const outputDirInput = target[3] as HTMLInputElement;
+    const subdomainInput = target[0] as HTMLInputElement;
+    const repoUrlInput = target[1] as HTMLInputElement;
+    const branchInput = target[2] as HTMLInputElement;
+    const buildCommandInput = target[3] as HTMLInputElement;
+    const outputDirInput = target[4] as HTMLInputElement;
 
+    const subdomain = subdomainInput.value;
     const repoUrl = repoUrlInput.value;
     const branch = branchInput.value || "main";
     const buildCommand =
@@ -24,7 +57,13 @@
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ repoUrl, branch, buildCommand, outputDir }),
+      body: JSON.stringify({
+        subdomain,
+        repoUrl,
+        branch,
+        buildCommand,
+        outputDir,
+      }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -47,6 +86,25 @@
     on:submit|preventDefault={createGitDeployment}
     class="bg-slate-800 p-8 rounded-lg shadow-lg w-full max-w-md"
   >
+    <div class="mb-6">
+      <label for="subdomain" class="block text-sm font-medium mb-2 text-left"
+        >Subdomain (optional)</label
+      >
+      <input
+        type="text"
+        name="subdomain"
+        id="subdomain"
+        bind:value={subdomain}
+        on:input={checkSubdomainAvailability}
+        on:keydown={checkSubdomainAvailability}
+        class="w-full px-4 py-2 border border-slate-600 rounded-md bg-slate-700 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      {#if checkingSubdomain}
+        <p class="text-yellow-500 text-sm mt-2">Checking availability...</p>
+      {:else if !subdomainAvailable}
+        <p class="text-red-500 text-sm mt-2">{errorMessage}</p>
+      {/if}
+    </div>
     <div class="mb-6">
       <label for="repoUrl" class="block text-sm font-medium mb-2 text-left"
         >Repository URL</label
@@ -98,8 +156,8 @@
     </div>
     <button
       type="submit"
-      class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-      >Deploy</button
+      class="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-md focus:outline-none focus:ring-2 transition duration-200 disabled:bg-gray-500 disabled:cursor-not-allowed"
+      disabled={!subdomainAvailable}>Deploy</button
     >
   </form>
 </main>
@@ -121,7 +179,7 @@
     transition: background-color 0.2s ease-in-out;
   }
 
-  button:hover {
+  button:hover:not(:disabled) {
     background-color: #2563eb;
   }
 </style>

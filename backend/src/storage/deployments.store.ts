@@ -8,7 +8,7 @@ import {
 import { deploymentZod } from '../shared/validations';
 
 /**
- * This is a simple in-memory Redis store that stores deployments.
+ * Simple Redis-based storage for deployments
  */
 export namespace DeploymentsStore {
   export async function getDeployments(): Promise<Deployment[]> {
@@ -85,8 +85,10 @@ export namespace DeploymentsStore {
 
   export async function createNewDeployment(
     type: DeploymentTypeEnum,
+    subdomain?: string,
   ): Promise<string> {
-    const deploymentId = `${Date.now()}${Math.random().toString(36).slice(2, 6)}`;
+    const deploymentId =
+      subdomain ?? `${Date.now()}${Math.random().toString(36).slice(2, 6)}`;
     const newDeployment: Deployment = {
       id: deploymentId,
       status: DeploymentStatusEnum.PENDING,

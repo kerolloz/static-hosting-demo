@@ -13,6 +13,7 @@ import { logger } from './lib/logger';
 import { multer } from './lib/multer';
 import { SWAGGER_ROUTE, registerSwagger } from './lib/swagger';
 import { registerAllRoutes } from './routes';
+import 'fastify-multer/typings/fastify/index.d.ts';
 
 const app = fastify({ logger }).withTypeProvider<ZodTypeProvider>();
 
